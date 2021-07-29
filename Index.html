@@ -1,176 +1,138 @@
 <!DOCTYPE html>
-<html lang="de">
-<p id="slider"></p>
-<!-- Mirrored from assbach.com/tools/encrypt by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 29 Jul 2021 15:04:57 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<title>Text Encryption</title>
-	<meta name="description" content="encrypt and decrypt messages for a safe and secure private conversation with friends." />
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta content="Sascha Aßbach" name="author">
-	<meta content="index, follow" name="robots">
-	<link href="https://blog.assbach.de/feed/" rel="alternate" title="blog.assbach.de RSS-Feed" type="application/rss+xml">
-	<link href="bootstrap.min.css" rel="stylesheet">
-	<link href="fa-all.min.css"  rel="stylesheet">
-	<link href="green2018.css" rel="stylesheet"> 
+  <!-- Metadata -->
+  <meta charset="utf-8" />
+  <meta name="author" content="Jacob Strieb" />
+  <meta name="description" content="Password protect links using AES in the browser." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+
+  <title>Lock Your url with Password</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" type="text/css" />
+
+  <!-- Scripts -->
+  <script type="text/javascript" src="b64.js"></script>
+  <script type="text/javascript" src="api.js"></script>
+  <script type="text/javascript">
+    function error(text) {
+      document.querySelector(".error").style.display = "inherit";
+      document.querySelector("#errortext").innerText = `Error: ${text}`;
+    }
+
+
+    // Run when the <body> loads
+    function main() {
+      // Fail if the b64 library or API was not loaded
+      if (!("b64" in window)) {
+        error("Base64 library not loaded.");
+        return;
+      }
+      if (!("apiVersions" in window)) {
+        error("API library not loaded.");
+        return;
+      }
+    }
+  </script>
+  <script type="text/javascript" src="create.js"></script>
 </head>
-<body>
-	<div id="bg">
-		<nav class="navbar navbar-expand-lg navbar-custom fixed-top shadow">
-			<div class="container">
-				<h1 class="text-center text-lg-left align-self-center"><a href="https://www.facebook.com/ismail.mokara/">Ismail Mokara</a></h1> 
-				<h3 class="text-center text-lg-left align-self-center">I am always with you.</h3>
-				<div class="collapse navbar-collapse" id="navbarsExample07">
-					<ul class="nav navbar-nav ml-auto ">
-						<li class="nav-item active">
-							<a class="nav-link scroll" href="https://www.facebook.com/ismail.mokara/">Contact</a>
-						</li>
-						<li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="index.html" id="dropdownTools" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Other Links</a> <div class="dropdown-menu dropdown-menu-right shadow-lg" aria-labelledby="dropdownTools"> <a class="dropdown-item" href="#">Under Making</a><a class="dropdown-item" href="#">Under Making</a><a class="dropdown-item active" href="#">Under Making</a><a class="dropdown-item" href="#">Under Making</a><div class="dropdown-divider"></div><a class="dropdown-item" href="#">Under Making</a><a class="dropdown-item" href="#">Under Making</a><a class="dropdown-item" href="#">Under Making</a><a class="dropdown-item" href="#">Under Making</a><a class="dropdown-item" href="#">Under Making</a><a class="dropdown-item" href="#">Under Making</a> </div></li>					</ul>
-				</div>
-			</div>
-		</nav>
 
-		<div class="container-narrow">
-			<div class="row" id="tools">
-				<div class="col-md-12 firstcontainer">
-					<div class="box1 text-center">
-						<h2>Encrypt/Decrypt Text</h2>						
+<body onload="main()">
+  <!-- View on GitHub ribbon -->
+  <a href="https://www.facebook.com/ismail.mokara/" target="_blank">
+    <img class="ribbon" src="Link2Me.png" alt="Ismail Mokara" />
+  </a>
 
-						
-						
-						
-							<form action="https://assbach.com/tools/encrypt?" name="fe" onsubmit="process(window.a=!window.a); return false">
+  <!-- Explanation for those who do not have JavaScript enabled -->
+  <noscript>
+  <div style="border: 3px solid red; padding: 2em;">
+    <p>If you are seeing this, it means that you have JavaScript disabled. As a result, the application will not work properly for you. For example, none of the buttons will work.</p>
 
-								<textarea rows="8" cols="64" name="re" id="re" class="form-control copy" required="required"></textarea>
+    <p>This application is entirely programmed in JavaScript. This was done intentionally, so that all encryption and decryption happens client-side. This means the code runs as a distributed application, relying only on GitHub Pages for infrastructure. It also means that no data about locked links is ever stored on a server. The code is designed to be auditable so users can investigate what is happening behind the scenes.</p>
 
-							
-									<div class="row" >
-										<div class="col-12 col-md-5 text-md-left text-center">
-								 			<div class="form-group">
-								  				 <label for "key" class="pt-3">Your Keyword:</label>
-								  				 <input type="password" name="key" id="keyword" class="form-control" required="required" autocomplete="off">
-										 	</div>
-										</div>
-										<div class="col-md-7 text-md-right text-center pt-5">
-											<button type="button" class="btn btn-primary btn-lg" value="encrypt" id="encrypt"><i class="fas fa-lock"></i>Encrypt</button>
-									 		<button type="button" class="btn btn-primary btn-lg" value="decrypt" id="decrypt"><i class="fas fa-unlock"></i>Decrypt</button>
-									 		<button type="button" class="btn btn-primary btn-lg copy" value="copy" id="copy" data-clipboard-action="copy" data-clipboard-target="#re"><i class="fas fa-copy"></i>Copy</button>
-											<button type="reset"  class="btn btn-primary btn-lg" id="reset" value="reset"><i class="fas fa-trash-alt"></i>Clear</button>
-										</div>
-									</div>
+     </div>
+  </noscript>
 
+  <!-- Display errors in a big red box -->
+  <div class="error red-border" style="display: none">
+    <p id="errortext">Error</p>
+    <button onclick="main()">Try again</button>
+  </div>
 
-							</form>
-							<div class="text-left"><span id="response">&nbsp;</span></div> 
-				
-						
-						
+  <!-- Project description -->
+  <h2>Lock your url with password</h2>
+  <div>
+    <p>আপনি যে কোন ওয়েব লিংক-কে এর মাধ্যমে পাসওয়ার্ড দিয়ে লক করতে পারবেন। ফলে আপনার পাঠানো/শেয়ার করা লিংক-এ কেউ প্রবেশ করতে চাইলে, আপনার দেয়া পাসওয়ার্ড ব্যতীত প্রবেশ করতে পারবে না। প্রথম বক্সে লিংক-টি লিখুন এবং পাসওয়ার্ড এর বক্সে পাসওয়ার্ড দিন। ইচ্ছে করলে, পাসওয়ার্ড এর জন্যে হিনটস সেট করতে পারেন। এরপর Encrypt বাটনে ক্লিক করলে, নিচের Output বক্সে এনক্রিপটেড লিংক পেয়ে যাবেন। লিংকটি অনেক বড় হবে। ইচ্ছে করলে Get Shortened Link বাটনে ক্লিক করে, আপনি একটি ছোট লিংক তৈরী করতে পারবেন।</p>
+     </div>
 
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box0 mt-3">						
-						How to use:
-						<ol>
-							<li><strong>Paste or type the text</strong> you want to <em>encrypt</em> into the large input field.</li>
-							<li>Then <strong>enter a keyword</strong>.</li>
-							<li>Press the <strong>encrypt button</strong> and</li>
-							<li><strong>Copy</a> the encrypted text</strong> into an email or chat or wherever.</li>
-						</ol>
-					
-						<p>Be sure to give the keyword to the recipient so that they can decrypt the text. I suggest to use a safer way than email to deliver the keyword (chat, txt, voice maybe). To <em>decrypt</em> a text use the same way and press the decrypt button. <b>None of the data you enter is saved or even being sent to the server</b>, the encryption happens in your browser (via JavaScript).</p>
+  <hr />
 
-						
-					</div>
-				</div>
-			</div>
-			<footer> <div class="row mt-5"> <div class="col-12 col-md-6 text-md-left text-center">You'll find me in fb & youtube as <strong> Ismail Mokara </strong></div><div class="col-12 col-md-6 text-md-right text-center"> <a href="https://www.facebook.com/ismail.mokara/" target="_blank">Me in Facebook</a> // <a href="https://www.youtube.com/channel/UCmm_EdhIRmRhHLQAfFfF1bw" target="_blank">Me in Youtube</a> // <a href="#slider">Top</a> </div></div></footer>		</div>
-			
-					
-	</div> 
-	<script src="jquery-3.3.1.min.js"></script>
-	<script src="popper.min.js"></script>
-	<script src="bootstrap.min.js"></script>
-	<script src="clipboard.min.js"></script>
-	<script src="alphac.js"></script>
+  <!-- Main form -->
+  <div class="form">
+    <div class="labeled-input">
+      <label for="url">secret link</label>
+      <input type="url" id="url" placeholder="https://" oninvalid="if (!this.validity.customError) this.setCustomValidity('Please enter a valid URL. Make sure to include \'http://\' or \'https://\' at the beginning.')" oninput="this.setCustomValidity('')" required />
+    </div>
+    <div class="labeled-input hint">
+      <label for="url">hint (optional)</label>
+      <textarea id="hint" rows="1"></textarea>
+    </div>
+    <div class="split-row">
+      <div class="labeled-input password">
+        <label for="password">password</label>
+        <input type="password" id="password" />
+      </div>
+      <div class="labeled-input confirm-password">
+        <label for="confirm-password">confirm password</label>
+        <input type="password" id="confirm-password" oninput="this.setCustomValidity('')" />
+      </div>
+    </div>
 
-	<script type="text/javascript">
-	function process(on) {
-		var fe = document.fe;
-		var ke = fe.key.value;
-		var re = fe.re;
-		var f = timer(function() {
-			re.value = alphac(re.value, ke, md5(ke), on)
-		});
+    <!-- Advanced options (JavaScript-activated dropdown) -->
+    <details>
+      <summary id="advanced-label">advanced</summary>
+      <div class="advanced" id="advanced">
+        <div class="labeled-input">
+          <label for="iv">random initialization vector</label>
+          <input type="checkbox" id="iv" onclick="onIvCheck(this)" checked />
+        </div>
+        <div class="labeled-input">
+          <label for="salt">random salt</label>
+          <input type="checkbox" id="salt" />
+        </div>
+      </div>
+    </details>
+    <button id="encrypt" onclick="onEncrypt()">Encrypt</button>
+  </div>
 
-		var t = f();
-		var d = re.value.length;
-		var r = Math.round(d / t * 1000);
+  <hr />
 
-	}
-	</script>
+  <!-- Output area -->
+  <div class="output">
+    <label for="output">output</label>
+    <input type="text" id="output" readonly/>
+    <button id="copy" onclick="onCopy('output')">Copy</button>
+    <!--<a href="" id="open" target="_blank"><button>Open in New Tab</button></a>-->
+    <!-- Special incantation to make TinyURL work -->
+    <form action="http://tinyurl.com/create.php" method="get" target="_blank" style="display: inline;">
+      <input type="hidden" id="source" name="source" value="indexpage" />
+      <input type="hidden" id="tinyurl" name="url" value = "" />
+      <button>Get Shortened Link</button>
+    </form>
+    <p class="alert">Copied</p>
+  </div>
 
-	<script>
+  <!-- Page footer -->
+  <footer>
 
-			$('#re').focus();
+  <img src="Ismail.jpg" alt="Ismail Mokara" />
+    <hr />
+  <p class="copyright">My youtube Channel: <a href="https://www.youtube.com/channel/UCmm_EdhIRmRhHLQAfFfF1bw/">Ismail Mokara</a>.</p>
+  </footer>
+</body>
 
-			$('#re').change();
-
-			function mes(text) {
-
-				$('#response')
-					.fadeTo(300,0)
-					.delay(300)
-					.queue(function(){
-		       			$(this).html("<kbd>"+text+"</kbd>").dequeue();
-		 		    })
-		 		    .fadeTo(600,100);
-
-
-				//$('#response').html("<kbd>"+text+"</kbd>").fadeIn();
-			}
-
-			$('button#encrypt').click( function(){  
-				
-				if ($('#re').val() == "" || $('#keyword').val() == "") {
-					
-					mes("Please enter required fields marked with a red border.");
-					$('#re').focus();
-
-				} else { 
-					process(1); 
-					mes("Message encrypted! Now copy.");
-				}
-			})
-
-			$('button#decrypt').click( function(){  process(0); })
-
-			$('button#reset').click( function(){ mes("Fields cleared."); $('#re').focus();})
-
-			$('button#copy').click( function(){ 
-
-
-
-				if ($('#re').val() == "" || $('#keyword').val() == "") {
-					mes("Enter required fields");			
-				} else {
-					var clipboard = new ClipboardJS('.copy');
-					clipboard.on('success', function(e) {
-						mes("Encrypted message copied to clipboard! Make sure to share the keyword.");
-					});
-				}
- 			})
-
-
-
-		
-
-	</script>
-	<script>var _paq=_paq || []; _paq.push(["setDocumentTitle", document.domain + "/" + document.title]); _paq.push(['trackPageView']); _paq.push(['enableLinkTracking']); (function(){var u="https://blog.assbach.de/piwik/"; _paq.push(['setTrackerUrl', u+'piwik.php']); _paq.push(['setSiteId', '2']); var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);})();</script>
-	</body>
-
-<!-- Mirrored from assbach.com/tools/encrypt by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 29 Jul 2021 15:05:11 GMT -->
 </html>
